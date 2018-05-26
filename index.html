@@ -11,16 +11,68 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link rel='stylesheet' href='assets/style/style.css'>
 
-    <title>Rock, Paper, Scissors - Multiplayer</title>
+    <title>Sword-Shield-Daggers Online</title>
   </head>
   <body>
-        <div class='cotainer-fluid'>
+        <div class='container-fluid'>
             <div class='row'>
-                <div class='col'>
-                    <h1>Rock, Paper, Scissors - Multiplayer</h1>
+                <div class='col d-flex'>
+                    <h1 class='mx-auto' id='banner'>Sword-Shield-Daggers Online</h1>
+                </div>
+            </div>
+            <div class='row mt-5 pt-5' id='login-area'>
+                <div class='col d-flex flex-column'>
+                    <form class='m-auto d-flex flex-column'>
+                        <div class="form-group d-flex flex-column">
+                            <label class='mx-auto my-2' for="username">Inscribe Your Name</label>
+                            <input type="text" class="form-control" id="username" placeholder="">
+                        </div>
+                        <button type="button" class="btn btn-primary bg-danger" id='name-submit'>Enter the Battlefield</button>
+                    </form>
+                </div>
+            </div>
+            <div class='row d-none' id='play-area'>
+                <div class='col d-flex flex-wrap justify-content-center'>
+                    <div class='d-flex flex-column m-3 p-3' id='sword'>
+                        <h2>Sword</h2>
+                        <img class='mx-auto' src='assets/images/winged-sword.png'>
+                    </div>
+                    <div class='d-flex flex-column m-3 p-3' id='shield'>
+                        <h2>Shield</h2>
+                        <img class='mx-auto' src='assets/images/winged-shield.png'>
+                    </div>
+                    <div class='d-flex flex-column m-3 p-3' id='daggers'>
+                        <h2>Daggers</h2>
+                        <img class='mx-auto' src='assets/images/daggers.png'>          
+                    </div>
+                </div>
+            </div>
+            <div class='row d-none mt-5' id='lower-ui'>
+                <div class='col-4 d-flex flex-column'>
+                    <form>
+                        <div class="form-group">
+                            <label class='messaging-label' for="message-list">Chat Window</label>
+                            <textarea class="form-control" readonly id="message-list" rows="7"></textarea>
+                        </div>
+                        <div class="form-group d-flex flex-row">
+                            <label class='messaging-label my-auto' for="message-input">Message</label>
+                            <textarea class="form-control mx-2 p-2" id="message-input" rows="1"></textarea>
+                            <button type="button" class="btn btn-primary bg bg-danger" id='send-button'>Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class='col-4'>
+                    <div id='hud'></div>
+                </div>
+                <div class='col-4 d-flex flex-column' id='lobby-area'>
+                    <h3 class='mx-auto mb-3'>Online Challengers</h3>
+                    <div class='p-3 bg bg-light' id='lobby'></div>
                 </div>
             </div>
 
@@ -29,6 +81,21 @@
             <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+            <!-- Firebase -->
+            <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+            <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyACGDWkefhFnmXowhSAAg6wbOytkEZaTvs",
+                authDomain: "mrps-99.firebaseapp.com",
+                databaseURL: "https://mrps-99.firebaseio.com",
+                projectId: "mrps-99",
+                storageBucket: "mrps-99.appspot.com",
+                messagingSenderId: "756602129445"
+            };
+            firebase.initializeApp(config);
+            </script>
 
             <!-- Custom JS -->
             <script  src='assets/javascript/logic.js'></script>

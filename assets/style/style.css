@@ -1,0 +1,55 @@
+
+body {
+    font-family: 'Rock Salt', cursive;
+    overflow: hidden;
+}
+
+#banner {
+    margin-top: 100px;
+}
+
+form {
+    /* font-family: 'MedievalSharp', cursive; */
+    font-weight: bold;
+    font-size: 30px;
+}
+
+input, h2 {
+    text-align: center;
+}
+
+#play-area {
+    opacity: 0;
+    margin-top: 200px;
+}
+
+#sword, #shield, #daggers {
+    border: 10px solid black;
+    width: 250px;
+    height: 250px;
+}
+
+img {
+    max-width: 150px;
+    max-height: 150px;
+}
+
+#lower-ui {
+    opacity: 0;
+    max-height: 250px;
+}
+
+#message-list, #message-input {
+    resize: none;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.messaging-label {
+    font-size: 15px;
+}
+
+#lobby {
+    border: 5px solid lightgray;
+    overflow: auto;
+}
