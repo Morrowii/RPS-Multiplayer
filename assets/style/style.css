@@ -52,4 +52,5 @@ img {
 #lobby {
     border: 5px solid lightgray;
     overflow: auto;
+    height: 200px;
 }

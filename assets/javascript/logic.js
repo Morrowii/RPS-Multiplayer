@@ -1,7 +1,16 @@
 // Clean and annotate code, write README, add to portfolio, submit
-// Online/offline functionality, send/recieve challenges, accept/decline challenges, start game, get game working, create/dynamically update stats section
+// logout function, decline challenges, create/dynamically update stats section, reset values when needed
 
 var dbref = firebase.database().ref();
+var timer = setInterval(lobby, 15000);
+var name = 'Anonymous';
+var challengedUser = '';
+var opponent = '';
+var uChoice = '';
+var oChoice = '';
+var plays;
+var wins;
+var losses;
 
 dbref.once('value', function(snapshot) {
     if (snapshot.hasChild('Users')) {
@@ -10,9 +19,7 @@ dbref.once('value', function(snapshot) {
     else {
         dbref.child('Users').set(0);
     }
-  });
-
-var name = 'Anonymous';
+});
 
 $('.container-fluid').on('click', '#name-submit', function() {
 
@@ -29,20 +36,24 @@ $('.container-fluid').on('click', '#name-submit', function() {
             });
             loginAnimation();
             lobby();
+            challenges();
         }
         else {
             dbref.child('Users/' + name).set(0);
     
             dbref.child('Users/' + name).set({
                 Online: true,
+                Playing: false,
                 Choice: 'None',
                 Plays: 0,
                 Wins: 0,
                 Losses: 0,
-                Challenger: 'None'
+                Challenger: 'None',
+                Opponent: 'None'
             });
             loginAnimation();
             lobby();
+            challenges();
         }
     });
 
@@ -93,8 +104,6 @@ dbref.child('Messaging').on('child_added', function(childsnapshot) {
     $('#message-list').text(previousMessages + '\n' + childsnapshot.val().userName + ': ' + childsnapshot.val().userMessage);
 });
 
-var timer = setInterval(lobby, 15000);
-
 function lobby() {
     $('#lobby').empty();
     dbref.child('Users').once('value', function(snapshot) {
@@ -108,27 +117,88 @@ function lobby() {
     });
 };
 
-var challenger = '';
-
 $('#lobby').on('click', 'button', function() {
     $('#hud').empty();
-    challenger = $(this).text();
-    var challengerHead = $('<h4>').text(challenger);
+    challengedUser = $(this).text();
+    var challengerHead = $('<h4>').text(challengedUser);
     var challengeBtn = $('<button id="challenge-btn">').text('Challenge');
     var surrenderBtn = $('<button id="surrender-btn">').text('Surrender');
     $('#hud').append(challengerHead, challengeBtn, surrenderBtn);
-
-    dbref.child('Users/' + challenger).once('value', function(snapshot) {
-        // Something
-    });
 });
 
 $('#hud').on('click', '#challenge-btn', function() {
-    dbref.child('Users/' + challenger).update({
+    dbref.child('Users/' + challengedUser).update({
         Challenger: name
     });
 });
 
-dbref.child('Users/' + name + '/Challenger').on('value', function() {
+function challenges() {
+    dbref.child('Users/' + name).on('value', function(snapshot) {
+        if (snapshot.val().Playing === false && snapshot.val().Challenger !== 'None') {
+            $('#hud').empty();
+            var challengeMsg = $('<h4>').text(snapshot.val().Challenger);
+            var acceptBtn = $('<button id="accept-btn">').text('Accept');
+            var declineBtn = $('<button id="decline-btn">').text('Decline');
+            $('#hud').append(challengeMsg, acceptBtn, declineBtn);
+        };
+    });
+};
 
+$('#hud').on('click', '#accept-btn', function() {
+    opponent = $('h4').text();
+    dbref.child('Users/' + name).update({
+        Playing: true,
+        Opponent: opponent
+    });
+    dbref.child('Users/' + opponent).update({
+        Playing: true,
+        Opponent: name
+    });
+    // Message
 });
+
+$('.game-btn').on('click', function() {
+    uChoice = $(this).attr('value');
+    dbref.child('Users/' + name).once('value', function(snapshot) {
+        opponent = snapshot.val().Opponent;
+        if (snapshot.val().Playing === true) {
+            dbref.child('Users/' + name).update({
+                Choice: uChoice
+            });
+        };
+    });
+});
+
+dbref.child('Users/').on('value', function() {
+    dbref.child('Users/' + opponent).once('value', function(snapshot) {
+        if (opponent !== '' && uChoice !== '') {
+            oChoice = snapshot.val().Choice;
+            if (uChoice != '' && oChoice != '') {
+                referee();
+            }
+        }
+    });
+});
+
+function referee() {
+
+    if (oChoice == uChoice) {
+        var gameMessage = $('<h4>').text("You Tied!");
+    }
+    else if ((oChoice == "sword" && uChoice == "shield") || (oChoice == "shield" && uChoice == "daggers") || (oChoice == "daggers" && uChoice == "sword")) {
+        var gameMessage = $('<h4>').text("You Win!");
+        wins++;
+        //wins.textContent = wincount;
+    }
+    else if ((oChoice == "sword" && uChoice == "daggers") || (oChoice == "shield" && uChoice == "sword") || (oChoice == "daggers" && uChoice == "shield")) {
+        var gameMessage = $('<h4>').text("You Lose!");
+        losses++;
+        //losses.textContent = losscount;
+    }
+
+    $('#hud').empty().append(gameMessage);
+
+    plays++;
+    //plays.textContent = playcount;
+
+}
