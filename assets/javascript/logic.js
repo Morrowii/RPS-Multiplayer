@@ -1,8 +1,8 @@
-// Clean and annotate code, write README, add to portfolio, submit
+// clean and annotate code, write README, add to portfolio, submit
 // logout function, decline challenges, create/dynamically update stats section, reset values when needed
 
 var dbref = firebase.database().ref();
-var timer = setInterval(lobby, 15000);
+var timer = setInterval(lobby, 10000);
 var name = 'Anonymous';
 var challengedUser = '';
 var opponent = '';
