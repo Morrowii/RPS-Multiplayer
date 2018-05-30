@@ -1,6 +1,10 @@
 // clean and annotate code
-// logout functionality, decline challenges, fix referee function running twice per round (double stats)
+// style game tiles to visually resond to player choices
+// fix game logic breaking after first round, fix referee function running twice per round (double stats)
 // reset 'Challenger' and 'Playing' keys when leaving game (otherwise game breaks when logging back in)
+// logout functionality, decline challenges
+
+// NOTE: realized I should have used a different database structure where players are assigned to a new common folder upon accepting a challenge rather than trying to sync data between two different player folders which made the code overly complicated and caused a lot of problems...oops...now I know.
 
 var dbref = firebase.database().ref();
 var timer = setInterval(lobby, 10000);
@@ -164,7 +168,6 @@ $('#hud').on('click', '#accept-btn', function() {
         Playing: true,
         Opponent: name
     });
-    // Message
 });
 
 $('.game-btn').on('click', function() {
@@ -188,8 +191,8 @@ dbref.child('Users/').on('value', function() {
     });
     if (uChoice !== '' && oChoice !== '') {
         referee();
-        updateStats();
         reset();
+        updateStats();
     }
 });
 
